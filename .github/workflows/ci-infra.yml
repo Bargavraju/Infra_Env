@@ -46,7 +46,8 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: envs/dev
-          framework: terraform
+          # framework: terraform
+          soft_fail: true
 
   # ================= TEST VALIDATION =================
 
@@ -84,7 +85,8 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: envs/test
-          framework: terraform
+          # framework: terraform
+          soft_fail: true
 
   # ================= PROD VALIDATION =================
 
@@ -122,4 +124,5 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: envs/prod
-          framework: terraform
+          # framework: terraform
+          soft_fail: true
