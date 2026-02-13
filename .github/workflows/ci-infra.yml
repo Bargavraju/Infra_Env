@@ -3,14 +3,13 @@ name: CI Infra (Terraform Multi-Env)
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
-  id-token: write     # Required for Azure OIDC
+  id-token: write # Required for Azure OIDC
   contents: read
 
 jobs:
-
   # ================= DEV VALIDATION ==============
 
   validate-dev:
@@ -49,7 +48,6 @@ jobs:
           directory: envs/dev
           framework: terraform
 
-
   # ================= TEST VALIDATION =================
 
   validate-test:
@@ -87,7 +85,6 @@ jobs:
         with:
           directory: envs/test
           framework: terraform
-
 
   # ================= PROD VALIDATION =================
 

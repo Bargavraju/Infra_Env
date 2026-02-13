@@ -18,7 +18,7 @@ module "rg" {
 }
 
 module "webapp" {
-  source    = "../../modules/web_app"
+  source = "../../modules/web_app"
 
   app_name  = var.app_name
   plan_name = var.plan_name
