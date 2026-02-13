@@ -1,0 +1,128 @@
+name: CI Infra (Terraform Multi-Env)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write # Required for Azure OIDC
+  contents: read
+
+jobs:
+  # ================= DEV VALIDATION ==============
+
+  validate-dev:
+    name: Validate DEV
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (DEV)
+        run: terraform init
+        working-directory: envs/dev
+
+      - name: Terraform Format Check (DEV)
+        run: terraform fmt -check -recursive
+        working-directory: envs/dev
+
+      - name: Terraform Validate (DEV)
+        run: terraform validate
+        working-directory: envs/dev
+
+      - name: Checkov Scan (DEV)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: envs/dev
+          # framework: terraform
+          soft_fail: true
+
+  # ================= TEST VALIDATION =================
+
+  validate-test:
+    name: Validate TEST
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (TEST)
+        run: terraform init
+        working-directory: envs/test
+
+      - name: Terraform Format Check (TEST)
+        run: terraform fmt -check -recursive
+        working-directory: envs/test
+
+      - name: Terraform Validate (TEST)
+        run: terraform validate
+        working-directory: envs/test
+
+      - name: Checkov Scan (TEST)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: envs/test
+          # framework: terraform
+          soft_fail: true
+
+  # ================= PROD VALIDATION =================
+
+  validate-prod:
+    name: Validate PROD
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (PROD)
+        run: terraform init
+        working-directory: envs/prod
+
+      - name: Terraform Format Check (PROD)
+        run: terraform fmt -check -recursive
+        working-directory: envs/prod
+
+      - name: Terraform Validate (PROD)
+        run: terraform validate
+        working-directory: envs/prod
+
+      - name: Checkov Scan (PROD)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: envs/prod
+          # framework: terraform
+          soft_fail: true
