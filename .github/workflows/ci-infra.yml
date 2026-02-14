@@ -87,7 +87,6 @@ jobs:
           directory: envs/test
           # framework: terraform
           soft_fail: true
-
   # ================= PROD VALIDATION =================
 
   validate-prod:
