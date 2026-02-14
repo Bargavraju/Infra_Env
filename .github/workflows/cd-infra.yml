@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 jobs:
+
   # ================= DEV DEPLOY =================
 
   deploy-dev:
@@ -101,5 +102,11 @@ jobs:
         working-directory: envs/prod
 
       - name: Terraform Apply (PROD)
-        run: terraform apply -auto-approve
         working-directory: envs/prod
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform apply -auto-approve
+        # run: terraform apply -auto-approve
+        # working-directory: envs/prod
