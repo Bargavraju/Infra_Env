@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 jobs:
+
   # ================= DEV DEPLOY =================
 
   deploy-dev:
@@ -36,6 +37,7 @@ jobs:
       - name: Terraform Apply (DEV)
         run: terraform apply -auto-approve
         working-directory: envs/dev
+        
   # ================= TEST DEPLOY =================
 
   deploy-test:
